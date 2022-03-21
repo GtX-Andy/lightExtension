@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<lightExtensionShared>
+    <strobeLight>
+        <filename>$data/shared/assets/lights/lizard/sideMarker10Orange.i3d</filename>
+        <rootNode node="0" />
+        <light shaderNode="0|0" intensity="100"/>
+    </strobeLight>
+
+    <runningLight>
+        <filename>$data/shared/assets/lights/lizard/sideMarker10Orange.i3d</filename>
+        <rootNode node="0" />
+        <light shaderNode="0|0" intensity="100"/>
+    </runningLight>
+</lightExtensionShared>
