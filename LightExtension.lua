@@ -3,7 +3,7 @@ Copyright (C) GtX (Andy), 2018
 
 Author: GtX | Andy
 Date: 17.12.2018
-Revision: FS22-01
+Revision: FS22-02
 
 Contact:
 https://forum.giants-software.com
@@ -222,10 +222,8 @@ function LightExtension:onUpdate(dt, isActiveForInput, isActiveForInputIgnoreSel
         if spec.strobeLightsActive then
             spec.strobeLightsNeedReset = true
 
-            for i = 1, #spec.strobeLights do
-                local light = spec.strobeLights[i]
-
-                if light.time > light.sequenceTime then
+            for i, light in ipairs(spec.strobeLights) do
+                if light.time >= light.sequenceTime then
                     light.active = not light.active
 
                     if light.lightNode ~= nil then
@@ -250,13 +248,13 @@ function LightExtension:onUpdate(dt, isActiveForInput, isActiveForInputIgnoreSel
                             light.sequenceTime = math.random(light.minOff, light.maxOff)
                         end
                     else
+                        light.sequenceTime = light.sequence[light.index]
+
                         light.index = light.index + 1
 
                         if light.index > light.sequenceCount then
                             light.index = 1
                         end
-
-                        light.sequenceTime = light.sequence[light.index]
                     end
 
                     light.time = 0
@@ -282,6 +280,14 @@ function LightExtension:onUpdate(dt, isActiveForInput, isActiveForInputIgnoreSel
 
                     if spec.hasRealStrobeLights and light.realLightNode ~= nil then
                         setVisibility(light.realLightNode, false)
+                    end
+
+                    if not light.isRandom then
+                        light.index = 1
+                        light.active = light.invert
+
+                        light.time = math.huge
+                        light.sequenceTime = 0
                     end
                 end
 
@@ -466,31 +472,32 @@ function LightExtension:loadLightExtensionLightStrobeDataFromXML(xmlFile, key, l
     local blinkPattern = xmlFile:getValue(key .. "#blinkPattern") -- Closely replicates ETS2 and ATS strobe patterns for those more familiar with this using a string of X and - characters, where X represents ON state and - represents OFF state.
 
     if blinkPattern ~= nil then
+        blinkPattern = blinkPattern:trim()
+
         local blinkStepLength = xmlFile:getValue(key .. "#blinkStepLength", 0.5) * 1000 -- Float representing duration of one step inside blink pattern in seconds.
 
         local sequence = {}
-        local invert
-
-        local stepOn = false
         local stepTime = 0
 
-        blinkPattern = blinkPattern:trim()
+        local invert = blinkPattern:sub(1, 1) == "-"
+        local lastCharacter = invert and "-" or "X"
+        local patternLength = #blinkPattern
 
-        for i = 1, #blinkPattern do
+        for i = 1, patternLength do
             local character = blinkPattern:sub(i, i)
 
             if LightExtension.stepCharacters[character] ~= nil then
-                if invert == nil then
-                    invert = character == "-"
-                end
-
-                if (character == "X" and not stepOn) or (character == "-" and stepOn) then
-                    table.insert(sequence, stepTime)
+                if lastCharacter ~= character then
+                    table.insert(sequence, math.floor(stepTime + 0.5))
                     stepTime = 0
                 end
 
                 stepTime = stepTime + blinkStepLength
-                stepOn = character == "X"
+                lastCharacter = character
+
+                if i == patternLength then
+                    table.insert(sequence, math.floor(stepTime + 0.5))
+                end
             end
         end
 
@@ -500,7 +507,7 @@ function LightExtension:loadLightExtensionLightStrobeDataFromXML(xmlFile, key, l
             light.sequenceCount = #light.sequence
             light.invert = invert
             light.active = invert
-            light.index = 0
+            light.index = 1
         else
             light.isRandom = true
             light.active = false
