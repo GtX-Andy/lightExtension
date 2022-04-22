@@ -1,6 +1,6 @@
 # Light Extension Specialisation for Farming Simulator 22
 
- `Farming Simulator  22`   `Revision:  FS22-01`
+ `Farming Simulator  22`   `Revision:  FS22-02`
 
 ## Usage
 This specialisation is free for use in any Farming Simulator vehicle mod for both ***Private*** and ***Public*** release.
@@ -36,7 +36,7 @@ These lights are activated with the `Beacon Light` key. In FS22 there is the abi
 <strobeLight sequence="600 600 200 200" invert="false"/>
 ```
 
-> Method 3: Allow the randomiser to create the sequence using the given values or defualt values.
+> Method 3: Allow the randomiser to create the sequence using the given values or default values.
 
 ```xml
 <strobeLight minOn="100" maxOn="100" minOff="100" maxOff="400"/>
@@ -55,7 +55,7 @@ Activates the Beacon and  Strobe lights when the grain hopper reaches the set pe
 ```
 
 ## Example Mod
-An example mod is available [HERE](https://workupload.com/file/kCjQqw2NPjM) that demonstrates the available features. This mods is not for release and is provided to assist with adding this specialisation to your own vehicles.
+An example mod is available [HERE](https://workupload.com/file/ETzyCN9PLdV) that demonstrates the available features. This mods is not for release and is provided to assist with adding this specialisation to your own vehicles.
 
 #### XML Info
 Please also see the [lightExtension_exampleXML](https://github.com/GtX-Andy/lightExtension/blob/master/lightExtension_exampleXML.html) for more information.
