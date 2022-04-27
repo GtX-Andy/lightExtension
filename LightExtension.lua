@@ -3,7 +3,7 @@ Copyright (C) GtX (Andy), 2018
 
 Author: GtX | Andy
 Date: 17.12.2018
-Revision: FS22-02
+Revision: FS22-03
 
 Contact:
 https://forum.giants-software.com
@@ -46,8 +46,8 @@ function LightExtension.initSpecialization()
 
     schema:register(XMLValueType.STRING, "vehicle.lightExtension.strobeLights.strobeLight(?)#filename", "Strobe light XML file")
     schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.strobeLights.strobeLight(?)#linkNode", "Shared I3d link node")
-    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.strobeLights.strobeLight#node", "Visibility toggle node")
-    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.strobeLights.strobeLight#shaderNode", "Light control shader node")
+    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.strobeLights.strobeLight(?)#node", "Visibility toggle node")
+    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.strobeLights.strobeLight(?)#shaderNode", "Light control shader node")
     schema:register(XMLValueType.FLOAT, "vehicle.lightExtension.strobeLights.strobeLight(?)#realLightRange", "Factor that is applied on real light range of the strobe light", 1)
     schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.strobeLights.strobeLight(?)#realLightNode", "Real light node. Only required if shared i3d does not include it or light is part of vehicle")
     schema:register(XMLValueType.INT, "vehicle.lightExtension.strobeLights.strobeLight(?)#intensity", "Strobe light intensity override or base value when light shader is part of vehicle")
@@ -64,8 +64,8 @@ function LightExtension.initSpecialization()
 
     schema:register(XMLValueType.STRING, "vehicle.lightExtension.runningLights.runningLight(?)#filename", "Running / DRL light XML file")
     schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.runningLights.runningLight(?)#linkNode", "Shared I3d link node")
-    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.runningLights.runningLight#node", "Visibility toggle node")
-    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.runningLights.runningLight#shaderNode", "Light control shader node")
+    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.runningLights.runningLight(?)#node", "Visibility toggle node")
+    schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.runningLights.runningLight(?)#shaderNode", "Light control shader node")
     schema:register(XMLValueType.FLOAT, "vehicle.lightExtension.runningLights.runningLight(?)#realLightRange", "Factor that is applied on real light range of the strobe light", 1)
     schema:register(XMLValueType.NODE_INDEX, "vehicle.lightExtension.runningLights.runningLight(?)#realLightNode", "Real light node. Only required if shared i3d does not include it or light is part of vehicle")
     schema:register(XMLValueType.INT, "vehicle.lightExtension.runningLights.runningLight(?)#intensity", "Running / DRL light intensity override or base value when light shader is part of vehicle")
@@ -504,7 +504,7 @@ function LightExtension:loadLightExtensionLightStrobeDataFromXML(xmlFile, key, l
         if #sequence > 0 then
             light.isRandom = false
             light.sequence = sequence
-            light.sequenceCount = #light.sequence
+            light.sequenceCount = #sequence
             light.invert = invert
             light.active = invert
             light.index = 1
@@ -519,15 +519,17 @@ function LightExtension:loadLightExtensionLightStrobeDataFromXML(xmlFile, key, l
             Logging.xmlWarning(xmlFile, "Invalid or no Blink Pattern' given in '%s'. Loading random sequence instead!", key)
         end
     else
-        local sequence = xmlFile:getValue(key .. "#sequence")
+        -- Make sure there is a real sequence or at least 1 value
+		local sequence = string.getVectorN(xmlFile:getValue(key .. "#sequence"))
+        local sequenceCount = sequence ~= nil and #sequence or 0
 
-        if sequence ~= nil then
+        if sequenceCount > 0 then
             light.isRandom = false
-            light.sequence = {string.getVector(sequence)}
-            light.sequenceCount = #light.sequence
+            light.sequence = sequence
+            light.sequenceCount = sequenceCount
             light.invert = xmlFile:getValue(key .. "#invert", false)
             light.active = light.invert
-            light.index = 0
+            light.index = 1
         else
             light.isRandom = true
             light.active = false
