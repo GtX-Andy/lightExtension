@@ -1,6 +1,6 @@
 # Light Extension Specialisation for Farming Simulator 22
 
- `Farming Simulator  22`   `Revision:  FS22-03`
+ `Farming Simulator  22`   `Revision:  FS22-04`
 
 ## Usage
 This specialisation is free for use in any Farming Simulator vehicle mod for both ***Private*** and ***Public*** release.

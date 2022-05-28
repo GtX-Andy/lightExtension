@@ -3,7 +3,7 @@ Copyright (C) GtX (Andy), 2018
 
 Author: GtX | Andy
 Date: 17.12.2018
-Revision: FS22-03
+Revision: FS22-04
 
 Contact:
 https://forum.giants-software.com
@@ -122,7 +122,7 @@ function LightExtension:onLoad(savegame)
     self.spec_lightExtension = self[LightExtension.SPEC_NAME]
 
     if self.spec_lightExtension == nil then
-        g_logManager:error("[%s] Specialization with name 'lightExtension' was not found in modDesc!", LightExtension.MOD_NAME)
+        Logging.error("[%s] Specialization with name 'lightExtension' was not found in modDesc!", LightExtension.MOD_NAME)
     end
 
     local spec = self.spec_lightExtension
