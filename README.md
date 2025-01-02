@@ -1,6 +1,11 @@
-# Light Extension Specialisation for Farming Simulator 22
+# Light Extension Specialisation
 
  `Farming Simulator  22`   `Revision:  FS22-04`
+
+## About
+A Farming Simulator 22 vehicle specialisation to allow more complex strobe light patterns, real running lights, beacon sounds and Harvester beacon warning.
+
+#### &nbsp;&nbsp;&nbsp;&nbsp; - Looking for [FS25_LightExtension](https://github.com/GtX-Andy/FS25_LightExtension) release?
 
 ## Usage
 This specialisation is free for use in any Farming Simulator vehicle mod for both ***Private*** and ***Public*** release.
